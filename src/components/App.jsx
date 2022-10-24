@@ -36,7 +36,7 @@ export class App extends Component {
   }
   onSubmitForm = data => {
     for (const element of this.state.contacts) {
-      if (element.name === data.name) {
+      if (element.name.toLowerCase() === data.name.toLowerCase()) {
         alert(`${element.name} is alrady in contacts`);
         return;
       }
@@ -66,6 +66,7 @@ export class App extends Component {
 
   render() {
     const { contacts, filter } = this.state;
+    const totalContacts = contacts.length;
 
     const visibleContacts = contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -81,12 +82,16 @@ export class App extends Component {
       >
         <h1>Phonebook</h1>
         <Phonebook onSubmitForm={this.onSubmitForm}></Phonebook>
-        <h2>Contacts</h2>
-        <Filter value={filter} onChange={this.changeFilter}></Filter>
-        <Contacts
-          contacts={visibleContacts}
-          onDelete={this.onDelete}
-        ></Contacts>
+        {totalContacts !== 0 && <h2>Contacts</h2>}
+        {totalContacts !== 0 && (
+          <Filter value={filter} onChange={this.changeFilter}></Filter>
+        )}
+        {totalContacts !== 0 && (
+          <Contacts
+            contacts={visibleContacts}
+            onDelete={this.onDelete}
+          ></Contacts>
+        )}
       </div>
     );
   }
